@@ -1,0 +1,7 @@
+ServerAliveInterval 60
+GSSAPIAuthentication no
+Host *
+     ForwardAgent yes
+     ControlMaster auto
+     ControlPath ~/.ssh/master-%r@%h:%p
+     SendEnv LANG LC_* GIT_*
