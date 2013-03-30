@@ -1,0 +1,73 @@
+#!/bin/bash
+
+function master_list {
+    MASTER_SOCKETS=`ls -1 ~/.ssh/ | egrep master-.*@.*:[0-9]+`
+    for socket in $MASTER_SOCKETS
+    do
+        echo $socket
+    done
+}
+
+function master_kill {
+    HOST=$1
+    MASTER_PID=`ps ux | grep "ssh \-TMNf .*$HOST" | awk '{print $2}'`
+
+    if [ -z "$MASTER_PID" ]; then
+       echo "No master connection found for $HOST"
+       continue
+    fi
+
+    kill $MASTER_PID
+}
+
+function master_connect {
+    HOST=$1
+    MASTER_SOCKET="master-$HOST:22"
+    FILE="$HOME/.ssh/$MASTER_SOCKET"
+
+    if [[ -S $FILE ]]; then
+        echo "Master connection to $host already exists"
+    else
+        ssh -TMNf $HOST
+    fi
+}
+
+if [ -z "$1" ]; then
+    echo "Usage: `basename $0` [--list] [--kill] [<user>@]<host> .. [<user>@]<host>"
+    exit 1
+fi
+
+KILL_HOSTS=false
+HOSTS=()
+
+# Parse arguments
+while [ $# -gt 0 ]
+do
+  case $1 in
+      --list)
+          master_list
+          exit 1
+          ;;
+      --kill)
+          KILL_HOSTS=true
+          shift
+          ;;
+      *@*)
+          HOSTS+=($1)
+          shift
+          ;;
+      *)
+          HOSTS+=(`whoami`@$1)
+          shift
+          ;;
+  esac
+done
+
+for HOST in ${HOSTS[@]}
+do
+    if $KILL_HOSTS; then
+        master_kill $HOST
+    else
+        master_connect $HOST
+    fi
+done

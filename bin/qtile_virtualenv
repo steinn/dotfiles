@@ -1,0 +1,3 @@
+#!/bin/bash
+workon qtile
+$HOME/.virtualenvs/qtile/bin/qtile
