@@ -1,0 +1,44 @@
+DOTFILES=$HOME/.dotfiles
+export PATH=$PATH:$DOTFILES/bin
+
+# Configure oh-my-zsh
+ZSH=$DOTFILES/zsh/oh-my-zsh
+ZSH_THEME="steeef"
+COMPLETION_WAITING_DOTS="true"
+plugins=(
+    archlinux
+    encode64
+    git
+    history
+    pip
+    python
+    screen
+    ssh-agent
+    systemd
+    virtualenvwrapper
+)
+source $ZSH/oh-my-zsh.sh
+
+
+# My customization
+
+export GIT_AUTHOR_NAME="Steinn Steinsen"
+export GIT_AUTHOR_EMAIL="steinnsteinsen@gmail.com"
+export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+export EDITOR="emacsclient -nw -c"
+export PATH=$PATH:$HOME/work/birdcore/scripts/bin
+
+# start ssh keychain
+eval `dircolors $DOTFILES/dircolors/dircolors`
+
+# aliases
+alias ls='ls --color=auto --group-directories-first -h'
+
+alias gs='git status'
+alias gf='git fetch'
+alias gr='git rebase'
+alias gfr='git fetch; git rebase'
+
+alias e='emacsclient -t'
+alias ec='emacsclient -c'
