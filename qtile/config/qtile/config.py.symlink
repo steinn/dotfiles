@@ -1,0 +1,173 @@
+from libqtile.config import Key, Group
+from libqtile.manager import Screen
+from libqtile.command import lazy
+from libqtile import layout, bar, widget, hook
+
+
+mod_key = "mod4"
+
+keys = [
+    # Toggle between different layouts as defined below
+    Key([mod_key], "Tab",    lazy.nextlayout()),
+
+    # Switch between windows in current stack pane
+    Key([mod_key], "k", lazy.layout.up()),
+    Key([mod_key], "j", lazy.layout.down()),
+    Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
+    Key([mod_key, "shift"], "j", lazy.layout.shuffle_down()),
+
+    # Switch window focus to other pane(s) of stack
+    Key([mod_key], "space", lazy.layout.next()),
+
+    # Swap panes of split stack
+    Key([mod_key, "shift"], "space", lazy.layout.rotate()),
+
+    # Toggle between split and unsplit sides of stack.
+    # Split = all windows displayed
+    # Unsplit = 1 window displayed, like Max layout,
+    # but still with multiple stack panes
+    Key([mod_key, "shift"], "Return", lazy.layout.toggle_split()),
+
+    Key([mod_key, "shift"], "a", lazy.layout.add()),
+    Key([mod_key, "shift"], "d", lazy.layout.delete()),
+
+    # xomand-tall key config
+    # Key([mod_key], "i", lazy.layout.grow()),
+    # Key([mod_key], "m", lazy.layout.shrink()),
+    # Key([mod_key], "n", lazy.layout.normalize()),
+    # Key([mod_key], "o", lazy.layout.maximize()),
+    # Key([mod_key, "shift"], "space", lazy.layout.flip()),
+
+    # Spawn commands
+    Key([mod_key], "Return", lazy.spawn("urxvt")),
+    Key([mod_key], "p", lazy.spawncmd()),
+
+    # Screen focus
+    Key([mod_key], "w", lazy.to_screen(0)),
+    Key([mod_key], "e", lazy.to_screen(1)),
+
+    # Misc
+    Key([mod_key, "control"], "q", lazy.shutdown()),
+    Key([mod_key, "control"], "r", lazy.restart()),
+    Key([mod_key, "shift"], "c", lazy.window.kill()),
+
+    # Volume
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("/usr/bin/vol_up")),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("/usr/bin/vol_down")),
+    Key([], "XF86AudioMute", lazy.spawn("/usr/bin/vol_toggle")),
+
+    # Lock Screen
+    Key([mod_key, "shift"], "l", lazy.spawn("$HOME/bin/lock_screen")),
+]
+
+groups = [
+    Group("1"),
+    Group("2"),
+    Group("3"),
+    Group("4"),
+    Group("5"),
+    Group("6"),
+    Group("7"),
+    #Group("8", persist=False, init=False),
+    # Group("9", persist=False, init=False),
+]
+for i in groups:
+    # mod1 + letter of group = switch to group
+    keys.append(
+        Key([mod_key], i.name, lazy.group[i.name].toscreen())
+    )
+
+    # mod1 + shift + letter of group = switch to & move focused window to group
+    keys.append(
+        Key([mod_key, "shift"], i.name, lazy.window.togroup(i.name))
+    )
+
+layouts = [
+    layout.Max(),
+    layout.Stack(stacks=2),
+    # layout.MonadTall(),
+    # layout.RatioTile(),
+    # layout.Slice("left", 256),
+    # layout.TreeTab(),
+    # layout.Zoomy(),
+]
+
+widget_defaults = {"fontsize": 12,
+                   "padding": 3}
+
+primary_widgets = [
+    widget.GroupBox(padding=2),
+    widget.sep.Sep(),
+    widget.WindowName(),
+    widget.Prompt(),
+    widget.CurrentLayout(),
+    widget.sep.Sep(),
+    widget.Wlan(interface="wlp3s0"),
+    widget.sep.Sep(),
+    widget.CPUGraph(line_width=1.5),
+    widget.MemoryGraph(graph_color="#ff0000",
+                       line_width=1.5),
+    widget.NetGraph(interface="wlp3s0",
+                    graph_color="#ffff00",
+                    line_width=1.5),
+    widget.sep.Sep(),
+    widget.Volume(),
+    widget.sep.Sep(),
+    widget.Battery(update_delay=5, foreground="#00ff00"),
+    widget.sep.Sep(),
+    widget.Clock('%H:%M:%S %d/%m/%y'),
+    widget.Notify(),
+]
+
+secondary_widgets = [
+    widget.GroupBox(padding=2),
+    widget.sep.Sep(),
+    widget.CurrentLayout(),
+    widget.sep.Sep(),
+    widget.WindowName(),
+
+]
+
+primary_bar = bar.Bar(primary_widgets, 20)
+seconadry_bar = bar.Bar(secondary_widgets, 20)
+
+screens = [
+    Screen(top=primary_bar),
+    Screen(top=seconadry_bar)
+]
+
+main = None
+follow_mouse_focus = True
+cursor_warp = False
+floating_layout = layout.Floating()
+mouse = ()
+
+
+#########
+# Hooks #
+#########
+
+import subprocess
+
+
+@hook.subscribe.startup
+def xsetroot():
+    subprocess.call(['xsetroot', '-cursor_name', 'left_ptr'])
+
+
+@hook.subscribe.startup
+def setxbkmap():
+    # Toggle layout change with menu key and use caps lock led to
+    # indicate what layout is on (on - is, off - us).
+    # Set caps lock as left ctrl
+    subprocess.call(['setxkbmap',
+                     '-layout', 'us, is',
+                     '-option', 'grp:menu_toggle',
+                     '-option', 'ctrl:nocaps',
+                     '-option', 'grp_led:caps',
+                     ])
+
+
+@hook.subscribe.startup
+def xset():
+    subprocess.call(['xset', 'b', 'off'])
