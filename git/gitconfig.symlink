@@ -1,0 +1,50 @@
+[user]
+	email = steinnsteinsen@gmail.com
+	name = Steinn Steinsen
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	grep = auto
+	interactive = auto
+	showbranch = auto
+	pager = true
+
+[core]
+	editor = emacsclient -t
+	excludesfile = /home/steinn/.gitignore
+
+[push]
+	default = upstream
+
+[alias]
+	ai = add --interactive
+	a  = add
+	d  = diff
+	dc = diff --cached
+	da = diff HEAD
+	s  = status
+	b  = branch
+	l  = log
+	f  = fetch
+	m  = merge
+	p  = push
+	co = checkout
+	r  = rebase
+	rs = remote show
+
+	cm = commit
+	cma = commit -a
+
+	up = !sh -c 'git pull && git log --pretty=format:\"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)\" HEAD@{1}..'
+
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	type = cat-file -t
+	dump = cat-file -p
+        lga = log --graph --all --pretty=format:'%Cred%h%Creset  %s  %C(blue)%an%Creset %C(yellow)%d%Creset' --abbrev-commit
+        lg = log --graph --pretty=format:'%Cred%h%Creset  %s  %C(blue)%an%Creset %C(yellow)%d%Creset' --abbrev-commit	
+
+
+
+

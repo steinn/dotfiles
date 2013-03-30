@@ -1,0 +1,4 @@
+*.~undo-tree~
+.ropeproject
+.projectile
+.dir-locals.el
