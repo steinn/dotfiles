@@ -16,11 +16,14 @@ xpdf*antialias:      yes
 xpdf*enableFreetype: yes
 !}}}
 
+!{{{ xterm
+xterm*eightBitInput: false
+!}}} xterm
 
 !{{{ URXVT
 !
 ! General
-URxvt*termName:           rxvt-unicode-256color
+! URxvt*termName:           rxvt-unicode-256color
 URxvt*loginShell:         true
 URxvt*scrollBar:          false
 URxvt*secondaryScroll:    true
