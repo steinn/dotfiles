@@ -78,6 +78,8 @@ def symlink(source, link_name):
 def rglob(path, pattern):
     """ Recursive glob """
     for root, dirnames, filenames in os.walk(path):
+        for dirname in fnmatch.filter(dirnames, pattern):
+            yield os.path.join(root,dirname)
         for filename in fnmatch.filter(filenames, pattern):
             yield os.path.join(root, filename)
 
