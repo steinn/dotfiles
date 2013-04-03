@@ -57,7 +57,7 @@ keys = [
     Key([], "XF86AudioMute", lazy.spawn("/usr/bin/vol_toggle")),
 
     # Lock Screen
-    Key([mod_key, "shift"], "l", lazy.spawn("$HOME/bin/lock_screen")),
+    Key([mod_key, "shift"], "l", lazy.spawn("$HOME/.dotfiles/bin/lock_screen")),
 ]
 
 groups = [
