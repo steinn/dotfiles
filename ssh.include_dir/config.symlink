@@ -1,5 +1,9 @@
 ServerAliveInterval 60
 GSSAPIAuthentication no
+
+Host hg.python.org
+     Compression yes
+
 Host *
      ForwardAgent yes
      ControlMaster auto
