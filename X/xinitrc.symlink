@@ -12,4 +12,7 @@ XRESOURCES=$HOME/.Xresources
 
 /usr/bin/xscreensaver -no-splash &
 
+# Fix java apps
+wmname LG3D
+
 exec qtile
