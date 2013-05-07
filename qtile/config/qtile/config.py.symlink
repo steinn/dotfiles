@@ -1,4 +1,4 @@
-from libqtile.config import Key, Group
+from libqtile.config import Drag, Click, Key, Group
 from libqtile.manager import Screen
 from libqtile.command import lazy
 from libqtile import layout, bar, widget, hook
@@ -15,6 +15,8 @@ keys = [
     Key([mod_key], "j", lazy.layout.down()),
     Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
     Key([mod_key, "shift"], "j", lazy.layout.shuffle_down()),
+    Key([mod_key, "control"], "k", lazy.layout.client_to_next()),
+    Key([mod_key, "control"], "j", lazy.layout.client_to_previous()),
 
     # Switch window focus to other pane(s) of stack
     Key([mod_key], "space", lazy.layout.next()),
@@ -43,8 +45,8 @@ keys = [
     Key([mod_key], "p", lazy.spawncmd()),
 
     # Screen focus
-    Key([mod_key], "w", lazy.to_screen(0)),
-    Key([mod_key], "e", lazy.to_screen(1)),
+    Key([mod_key], "w", lazy.to_screen(1)),
+    Key([mod_key], "e", lazy.to_screen(0)),
 
     # Misc
     Key([mod_key, "control"], "q", lazy.shutdown()),
@@ -133,14 +135,21 @@ seconadry_bar = bar.Bar(secondary_widgets, 20)
 
 screens = [
     Screen(top=primary_bar),
-    Screen(top=seconadry_bar)
+    Screen(top=seconadry_bar),
 ]
 
 main = None
 follow_mouse_focus = True
 cursor_warp = False
 floating_layout = layout.Floating()
-mouse = ()
+
+mouse = [
+    Drag([mod_key], "Button1", lazy.window.set_position_floating(),
+         start=lazy.window.get_position()),
+    Drag([mod_key], "Button3", lazy.window.set_size_floating(),
+         start=lazy.window.get_size()),
+    Click([mod_key], "Button2", lazy.window.bring_to_front())
+]
 
 
 #########
