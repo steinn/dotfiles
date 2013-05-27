@@ -1,8 +1,13 @@
+import socket
+
 from libqtile.config import Drag, Click, Key, Group
 from libqtile.manager import Screen
 from libqtile.command import lazy
 from libqtile import layout, bar, widget, hook
 
+
+HOSTNAME = socket.gethostname()
+NET_INTERFACE = "wlp3s0" if HOSTNAME == "joggz" else "eth0"
 
 mod_key = "mod4"
 
@@ -94,22 +99,21 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-widget_defaults = {"fontsize": 12,
-                   "padding": 3}
+widget_defaults = {"fontsize": 14,
+                   "padding": 3,
+                   "font": "Ubuntu Mono Bold"}
 
 primary_widgets = [
-    widget.GroupBox(padding=2),
+    widget.GroupBox(padding=0),
+    widget.sep.Sep(),
+    widget.CurrentLayout(),
     widget.sep.Sep(),
     widget.WindowName(),
     widget.Prompt(),
-    widget.CurrentLayout(),
-    widget.sep.Sep(),
-    widget.Wlan(interface="wlp3s0"),
-    widget.sep.Sep(),
     widget.CPUGraph(line_width=1.5),
     widget.MemoryGraph(graph_color="#ff0000",
                        line_width=1.5),
-    widget.NetGraph(interface="wlp3s0",
+    widget.NetGraph(interface=NET_INTERFACE,
                     graph_color="#ffff00",
                     line_width=1.5),
     widget.sep.Sep(),
@@ -117,17 +121,24 @@ primary_widgets = [
     widget.sep.Sep(),
     widget.Battery(update_delay=5, foreground="#00ff00"),
     widget.sep.Sep(),
+    widget.Systray(),
+    widget.sep.Sep(),
     widget.Clock('%H:%M:%S %d/%m/%y'),
     widget.Notify(),
 ]
 
+if HOSTNAME == "joggz":
+    primary_widgets.insert(6, widget.Wlan(interface="wlp3s0"))
+    primary_widgets.insert(7, widget.sep.Sep())
+
+
 secondary_widgets = [
-    widget.GroupBox(padding=2),
+    widget.GroupBox(padding=0),
     widget.sep.Sep(),
     widget.CurrentLayout(),
     widget.sep.Sep(),
     widget.WindowName(),
-
+    widget.Clock('%H:%M:%S %d/%m/%y'),
 ]
 
 primary_bar = bar.Bar(primary_widgets, 20)
@@ -156,27 +167,51 @@ mouse = [
 # Hooks #
 #########
 
+import os
 import subprocess
+import re
 
+
+def is_running(process):
+    if isinstance(process, list):
+        process = " ".join(process)
+    s = subprocess.Popen(["ps", "axw"], stdout=subprocess.PIPE)
+    for x in s.stdout:
+        if re.search(process, x):
+            return True
+    return False
+
+
+def execute(process):
+    if isinstance(process, basestring):
+        process = process.split()
+    return subprocess.Popen(process)
+
+
+def execute_once(process):
+    if not is_running(process):
+        execute(process)
 
 @hook.subscribe.startup
-def xsetroot():
-    subprocess.call(['xsetroot', '-cursor_name', 'left_ptr'])
+def startup():
+    if HOSTNAME != "joggz":
+        execute_once("nm-applet")
 
+    execute_once(["xsetroot", "-cursor_name", "left_ptr"])
+    execute_once(["wmname", "LG3D"])
+    execute_once(["xscreensaver", "-no-splash"])
 
-@hook.subscribe.startup
-def setxbkmap():
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
     # Set caps lock as left ctrl
-    subprocess.call(['setxkbmap',
-                     '-layout', 'us, is',
-                     '-option', 'grp:menu_toggle',
-                     '-option', 'ctrl:nocaps',
-                     '-option', 'grp_led:caps',
-                     ])
+    execute(["setxkbmap",
+             "-layout", "us, is",
+             "-option", "grp:menu_toggle",
+             "-option", "ctrl:nocaps",
+             "-option", "grp_led:caps"])
 
+    # disable bell
+    execute(["xset", "b", "off"])
 
-@hook.subscribe.startup
-def xset():
-    subprocess.call(['xset', 'b', 'off'])
+    xresources = os.path.expanduser("~/.Xresources")
+    execute(["xrdb", "-merge", xresources])

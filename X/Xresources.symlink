@@ -1,11 +1,29 @@
+! #if HEIGHT > 1100
+! #   define FONT Ubuntu Mono:pixelsize=16
+! #elif HEIGHT > 900
+! #   define FONT Ubuntu Mono:pixelsize=14
+! #elif HEIGHT > 790
+! #   define FONT Ubuntu Mono:pixelsize=14
+! #else
+! #   define FONT Ubuntu Mono:pixelsize=14
+! #endif
+
+!#define FONT Ubuntu Mono:pixelsize=17:weight=normal:slant=normal:width=normal:spacing=100:scalable=true
+
+#define FONT Ubuntu Mono
+
+!{{{ emacs(1) settings.
+emacs.font: FONT:pixelsize=18
+!}}}
+
 !{{{ XFT
-Xft.dpi:       96
-Xft.autohint:   0
-Xft.lcdfilter:  lcddefault
-Xft.hintstyle:  hintfull
-Xft.hinting:    1
-Xft.antialias:  1
-Xft.rgba:       rgb
+! Xft.dpi:       96
+! Xft.autohint:   0
+! Xft.lcdfilter:  lcddefault
+! Xft.hintstyle:  hintfull
+! Xft.hinting:    1
+! Xft.antialias:  1
+! Xft.rgba:       rgb
 !}}}
 
 !{{{ XPDF
@@ -17,13 +35,17 @@ xpdf*enableFreetype: yes
 !}}}
 
 !{{{ xterm
-xterm*eightBitInput: false
+XTerm*renderFont:    true
+XTerm*faceName:      FONT:pixelsize=17
+XTerm*eightBitInput: false
 !}}} xterm
 
 !{{{ URXVT
 !
 ! General
-! URxvt*termName:           rxvt-unicode-256color
+URxvt.font:               xft:FONT:pixelsize=17
+URxvt.letterSpace:        -1
+URxvt.lineSpace:          0
 URxvt*loginShell:         true
 URxvt*scrollBar:          false
 URxvt*secondaryScroll:    true
@@ -33,7 +55,7 @@ URxvt*urgentOnBell:       true
 URxvt.depth:              32
 URxvt.transparent:        false
 URxvt.internalBorder:     3
-URxvt.lineSpace:          0
+
 ! Disable ctrl+shift keybinding
 URxvt*iso14755:           false
 
@@ -45,12 +67,6 @@ URxvt.url-select.underline: true
 URxvt.colorUL:              #ffffff
 URxvt.keysym.M-u:           perl:url-select:select_next
 
-! Fonts
-! URxvt.allow_bold:         false
-! URxvt*letterSpace:        -1
-! URlxvt*font:     -xos4-terminus-medium-*-*-*-12-*-*-*-*-*-iso8859-2
-! urxvt*boldFont: -xos4-terminus-bold-*-*-*-12-*-*-*-*-*-iso8859-2
-!
 !}}} URXVT
 
 
