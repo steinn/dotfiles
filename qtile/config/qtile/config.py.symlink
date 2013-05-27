@@ -133,11 +133,12 @@ if HOSTNAME == "joggz":
 
 
 secondary_widgets = [
-    widget.GroupBox(padding=2),
+    widget.GroupBox(padding=0),
     widget.sep.Sep(),
     widget.CurrentLayout(),
     widget.sep.Sep(),
     widget.WindowName(),
+    widget.Clock('%H:%M:%S %d/%m/%y'),
 ]
 
 primary_bar = bar.Bar(primary_widgets, 20)
