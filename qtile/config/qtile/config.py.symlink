@@ -199,6 +199,7 @@ def startup():
 
     execute_once(["xsetroot", "-cursor_name", "left_ptr"])
     execute_once(["wmname", "LG3D"])
+    execute_once(["xscreensaver", "-no-splash"])
 
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
