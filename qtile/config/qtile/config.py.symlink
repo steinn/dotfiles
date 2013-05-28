@@ -197,8 +197,6 @@ def startup():
     if HOSTNAME != "joggz":
         execute_once("nm-applet")
 
-    execute_once(["xsetroot", "-cursor_name", "left_ptr"])
-    execute_once(["wmname", "LG3D"])
     execute_once(["xscreensaver", "-no-splash"])
 
     # Toggle layout change with menu key and use caps lock led to
@@ -212,6 +210,10 @@ def startup():
 
     # disable bell
     execute(["xset", "b", "off"])
+    execute(["xsetroot", "-cursor_name", "left_ptr"])
+    execute(["xsetroot", "-solid", "black"])
+    execute(["wmname", "LG3D"])
+
 
     xresources = os.path.expanduser("~/.Xresources")
     execute(["xrdb", "-merge", xresources])
