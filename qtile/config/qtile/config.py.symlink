@@ -194,8 +194,9 @@ def execute_once(process):
 
 @hook.subscribe.startup
 def startup():
-    if HOSTNAME != "joggz":
+    if HOSTNAME != "lt-h6-121023":
         execute_once("nm-applet")
+        execute_once("davmail")
 
     execute_once(["xscreensaver", "-no-splash"])
 
