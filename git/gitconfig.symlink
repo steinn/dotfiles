@@ -16,7 +16,7 @@
 	excludesfile = /home/steinn/.gitignore
 
 [push]
-	default = upstream
+	default = matching
 
 [alias]
 	ai = add --interactive
