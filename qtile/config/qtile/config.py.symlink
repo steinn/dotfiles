@@ -194,9 +194,9 @@ def execute_once(process):
 
 @hook.subscribe.startup
 def startup():
-    if HOSTNAME != "lt-h6-121023":
+    if HOSTNAME == "lt-h6-121023":
         execute_once("nm-applet")
-        execute_once("davmail")
+        #execute_once("davmail")
 
     execute_once(["xscreensaver", "-no-splash"])
 
@@ -214,6 +214,7 @@ def startup():
     execute(["xsetroot", "-cursor_name", "left_ptr"])
     execute(["xsetroot", "-solid", "black"])
     execute(["wmname", "LG3D"])
+    execute(["synclient", "PalmDetect=1"])
 
 
     xresources = os.path.expanduser("~/.Xresources")
