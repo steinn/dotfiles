@@ -43,7 +43,7 @@
 	type = cat-file -t
 	dump = cat-file -p
         lga = log --graph --all --pretty=format:'%Cred%h%Creset  %s  %C(blue)%an%Creset %C(yellow)%d%Creset' --abbrev-commit
-        lg = log --graph --pretty=format:'%Cred%h%Creset  %s  %C(blue)%an%Creset %C(yellow)%d%Creset' --abbrev-commit	
+        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar)%Creset %C(blue)    %an%Creset' --abbrev-commit
 
 
 
