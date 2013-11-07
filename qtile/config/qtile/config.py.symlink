@@ -92,6 +92,7 @@ for i in groups:
 layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
+    # layout.Floating(),
     # layout.MonadTall(),
     # layout.RatioTile(),
     # layout.Slice("left", 256),
@@ -124,7 +125,6 @@ primary_widgets = [
     widget.Systray(),
     widget.sep.Sep(),
     widget.Clock('%H:%M:%S %d/%m/%y'),
-    widget.Notify(),
 ]
 
 if HOSTNAME == "joggz":
@@ -196,9 +196,10 @@ def execute_once(process):
 def startup():
     if HOSTNAME == "lt-h6-121023":
         execute_once("nm-applet")
-        #execute_once("davmail")
+        execute_once(["/home/steinn/.dotfiles/bin/dunst"])
 
     execute_once(["xscreensaver", "-no-splash"])
+
 
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
@@ -215,7 +216,6 @@ def startup():
     execute(["xsetroot", "-solid", "black"])
     execute(["wmname", "LG3D"])
     execute(["synclient", "PalmDetect=1"])
-
 
     xresources = os.path.expanduser("~/.Xresources")
     execute(["xrdb", "-merge", xresources])
