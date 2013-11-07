@@ -13,7 +13,7 @@
 #define FONT Ubuntu Mono
 
 !{{{ emacs(1) settings.
-emacs.font: FONT:pixelsize=18
+emacs.font: FONT:pixelsize=16
 !}}}
 
 !{{{ XFT
