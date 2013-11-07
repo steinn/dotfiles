@@ -50,3 +50,4 @@ alias gfr='git fetch; git rebase'
 
 alias e='emacsclient -t'
 alias ec='emacsclient -c'
+[[ -s "$HOME/.pythonbrew/etc/bashrc" ]] && source "$HOME/.pythonbrew/etc/bashrc"
