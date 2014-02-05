@@ -38,6 +38,7 @@ xpdf*enableFreetype: yes
 XTerm*renderFont:    true
 XTerm*faceName:      FONT:pixelsize=17
 XTerm*eightBitInput: false
+XTerm*metaSendsEscape: true
 !}}} xterm
 
 !{{{ URXVT
