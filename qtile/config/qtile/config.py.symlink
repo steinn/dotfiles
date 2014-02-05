@@ -75,6 +75,9 @@ groups = [
     Group("5"),
     Group("6"),
     Group("7"),
+    Group("8"),
+    Group("9"),
+    Group("0"),
     #Group("8", persist=False, init=False),
     # Group("9", persist=False, init=False),
 ]
