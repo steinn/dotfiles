@@ -46,5 +46,7 @@
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar)%Creset %C(blue)    %an%Creset' --abbrev-commit
 
 
+        orgchangelog = log --format='** %s%n  Author:%an%n%n  Commit:%h%n%n  %b' --abbrev-commit  HEAD ^master
+
 
 
