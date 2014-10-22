@@ -1,0 +1,62 @@
+! Zenburn color scheme for X
+!
+! This is a port of the zenburn theme based
+! of the emacs port created by Bozhidar Batsov.
+!
+! http://github.com/bbatsov/zenburn-emacs
+!
+#define Z_fg_d1       #FFFFEF
+#define Z_fg          #DCDCCC
+#define Z_fg_l1       #656555
+#define Z_bg_d2       #000000
+#define Z_bg_d1       #2B2B2B
+#define Z_bg_d05      #383838
+#define Z_bg          #3F3F3F
+#define Z_bg_l1       #4F4F4F
+#define Z_bg_l2       #5F5F5F
+#define Z_bg_l3       #6F6F6F
+#define Z_red_l1      #DCA3A3
+#define Z_red         #CC9393
+#define Z_red_d1      #BC8383
+#define Z_red_d2      #AC7373
+#define Z_red_d3      #9C6363
+#define Z_red_d4      #8C5353
+#define Z_orange      #DFAF8F
+#define Z_yellow      #F0DFAF
+#define Z_yellow_d1   #E0CF9F
+#define Z_yellow_d2   #D0BF8F
+#define Z_green_d1    #5F7F5F
+#define Z_green       #7F9F7F
+#define Z_green_l1    #8FB28F
+#define Z_green_l2    #9FC59F
+#define Z_green_l3    #AFD8AF
+#define Z_green_l4    #BFEBBF
+#define Z_cyan        #93E0E3
+#define Z_blue_l1     #94BFF3
+#define Z_blue        #8CD0D3
+#define Z_blue_d1     #7CB8BB
+#define Z_blue_d2     #6CA0A3
+#define Z_blue_d3     #5C888B
+#define Z_blue_d4     #4C7073
+#define Z_blue_d5     #366060
+#define Z_magenta     #DC8CC3
+
+*foreground: Z_fg
+*background: Z_bg
+
+*color0: Z_bg
+*color1: Z_red_d3
+*color2: Z_green
+*color3: Z_yellow
+*color4: Z_blue
+*color5: Z_magenta
+*color6: Z_cyan
+*color7: Z_fg
+*color8: Z_bg_l1
+*color9: Z_red_l1
+*color10: Z_green_l1
+*color11: Z_orange
+*color12: Z_blue_l1
+*color13: Z_red
+*color14: Z_green_l4
+*color15: Z_fg_l1
