@@ -1,0 +1,6 @@
+#!/bin/bash
+# This hook is run after this virtualenv is deactivated.
+export LD_LIBRARY_PATH=$__OLD_LD_LIBRARY_PATH
+export LIBRARY_PATH=$__OLD_LIBRARY_PATH
+export INCLUDE_PATH=$__OLD_INCLUDE_PATH
+export PKG_CONFIG_PATH=$__OLD_PKG_CONFIG_PATH
