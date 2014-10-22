@@ -1,0 +1,2 @@
+#!/bin/bash
+PULSE_LATENCY_MSEC=60 nohup VidyoDesktop &

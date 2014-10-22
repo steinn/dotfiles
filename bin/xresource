@@ -1,0 +1,52 @@
+#!/bin/bash
+
+function usage
+{
+    echo "Usage: $(basename $0) [-c|--color <scheme>]"
+    echo "  <scheme> - zenburn|solarized-dark|solarized-light"
+}
+
+COLOR=zenburn
+X_FILES=$HOME/.dotfiles/X
+INCLUDE=$X_FILES/include
+
+# Parse cli args
+while [ $# -gt 0 ]
+do
+    case $1
+        in
+        -c)
+            ;&
+        --color)
+            COLOR=$2
+            shift 2
+            ;;
+        *)
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# Convert color arg to correct define symbol
+case $COLOR
+    in
+    zenburn)
+        COLOR=COLOR_ZENBURN
+        ;;
+    solarized-dark)
+        COLOR=COLOR_SOLARIZED_DARK
+        ;;
+    solarized-light)
+        COLOR=COLOR_SOLARIZED_LIGHT
+        ;;
+    *)
+        echo "Invalid color scheme\n"
+        usage
+        exit 1
+        ;;
+esac
+
+xrdb -merge -I$INCLUDE -D$COLOR $X_FILES/Xresources.symlink
+
+# Also update dircolors
