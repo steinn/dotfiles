@@ -1,16 +1,20 @@
-import socket
+import logging
+import os
+
+logging.basicConfig(
+    level=logging.DEBUG, filename=os.path.expanduser("~/.qtile.log"))
+logging.getLogger("qtile").setLevel(logging.INFO)
 
 from libqtile.config import Drag, Click, Key, Group
 from libqtile.manager import Screen
 from libqtile.command import lazy
-from libqtile import layout, bar, widget, hook
+from libqtile import layout, bar, widget
 
+#from system import get_num_monitors
 
-HOSTNAME = socket.gethostname()
-NET_INTERFACE = "wlp3s0" if HOSTNAME == "joggz" else "eth0"
+log = logging.getLogger("qtile.config")
 
 mod_key = "mod4"
-
 keys = [
     # Toggle between different layouts as defined below
     Key([mod_key], "Tab",    lazy.nextlayout()),
@@ -23,27 +27,14 @@ keys = [
     Key([mod_key, "control"], "k", lazy.layout.client_to_next()),
     Key([mod_key, "control"], "j", lazy.layout.client_to_previous()),
 
+
+    # Stack Layout
     # Switch window focus to other pane(s) of stack
     Key([mod_key], "space", lazy.layout.next()),
-
     # Swap panes of split stack
     Key([mod_key, "shift"], "space", lazy.layout.rotate()),
-
     # Toggle between split and unsplit sides of stack.
-    # Split = all windows displayed
-    # Unsplit = 1 window displayed, like Max layout,
-    # but still with multiple stack panes
     Key([mod_key, "shift"], "Return", lazy.layout.toggle_split()),
-
-    Key([mod_key, "shift"], "a", lazy.layout.add()),
-    Key([mod_key, "shift"], "d", lazy.layout.delete()),
-
-    # xomand-tall key config
-    # Key([mod_key], "i", lazy.layout.grow()),
-    # Key([mod_key], "m", lazy.layout.shrink()),
-    # Key([mod_key], "n", lazy.layout.normalize()),
-    # Key([mod_key], "o", lazy.layout.maximize()),
-    # Key([mod_key, "shift"], "space", lazy.layout.flip()),
 
     # Spawn commands
     Key([mod_key], "Return", lazy.spawn("urxvt")),
@@ -64,8 +55,10 @@ keys = [
     Key([], "XF86AudioMute", lazy.spawn("/usr/bin/vol_toggle")),
 
     # Lock Screen
-    Key([mod_key, "shift"], "l", lazy.spawn("$HOME/.dotfiles/bin/lock_screen")),
+    Key([mod_key, "shift"], "l",
+        lazy.spawn("$HOME/.dotfiles/bin/lock_screen")),
 ]
+
 
 groups = [
     Group("1"),
@@ -81,13 +74,14 @@ groups = [
     #Group("8", persist=False, init=False),
     # Group("9", persist=False, init=False),
 ]
+
 for i in groups:
-    # mod1 + letter of group = switch to group
+    # mod + letter of group = switch to group
     keys.append(
         Key([mod_key], i.name, lazy.group[i.name].toscreen())
     )
 
-    # mod1 + shift + letter of group = switch to & move focused window to group
+    # mod + shift + letter of group = switch to & move focused window to group
     keys.append(
         Key([mod_key, "shift"], i.name, lazy.window.togroup(i.name))
     )
@@ -112,45 +106,51 @@ primary_widgets = [
     widget.sep.Sep(),
     widget.CurrentLayout(),
     widget.sep.Sep(),
-    widget.WindowName(),
+    #widget.WindowName(fontsize=12),
     widget.Prompt(),
-    widget.CPUGraph(line_width=1.5),
+    widget.Spacer(),
+    widget.CPUGraph(line_width=1.5,
+                    width=100),
     widget.MemoryGraph(graph_color="#ff0000",
-                       line_width=1.5),
-    widget.NetGraph(interface=NET_INTERFACE,
-                    graph_color="#ffff00",
-                    line_width=1.5),
+                       line_width=1.5,
+                       samples=100,
+                       width=100),
+    widget.NetGraph(graph_color="#ffff00",
+                    line_width=1.5,
+                    width=100),
     widget.sep.Sep(),
     widget.Volume(),
     widget.sep.Sep(),
     widget.Battery(update_delay=5, foreground="#00ff00"),
     widget.sep.Sep(),
-    widget.Systray(),
+    widget.Systray(icon_size=15, padding=2),
     widget.sep.Sep(),
-    widget.Clock('%H:%M:%S %d/%m/%y'),
+    widget.Clock('%H:%M', timezone="UTC"),
+    widget.sep.Sep(),
+    widget.Clock('%H:%M:%S %d/%m'),
 ]
-
-if HOSTNAME == "joggz":
-    primary_widgets.insert(6, widget.Wlan(interface="wlp3s0"))
-    primary_widgets.insert(7, widget.sep.Sep())
-
 
 secondary_widgets = [
     widget.GroupBox(padding=0),
     widget.sep.Sep(),
     widget.CurrentLayout(),
     widget.sep.Sep(),
-    widget.WindowName(),
-    widget.Clock('%H:%M:%S %d/%m/%y'),
+    widget.Spacer(),
+    #widget.WindowName(),
+    widget.Clock('%H:%M', timezone="UTC"),
+    widget.sep.Sep(),
+    widget.Clock('%H:%M:%S %d/%m'),
 ]
 
 primary_bar = bar.Bar(primary_widgets, 20)
-seconadry_bar = bar.Bar(secondary_widgets, 20)
+secondary_bar = bar.Bar(secondary_widgets, 20)
 
 screens = [
     Screen(top=primary_bar),
-    Screen(top=seconadry_bar),
 ]
+screens.append(Screen(top=secondary_bar))
+#if get_num_monitors() > 1:
+
 
 main = None
 follow_mouse_focus = True
@@ -165,14 +165,28 @@ mouse = [
     Click([mod_key], "Button2", lazy.window.bring_to_front())
 ]
 
-
-#########
-# Hooks #
-#########
-
 import os
-import subprocess
+import signal
+
+from libqtile import hook
+
+import logging
+import platform
 import re
+import subprocess
+
+log = logging.getLogger("qtile.config.system")
+
+hostname = platform.node()
+
+
+def get_num_monitors():
+    output = subprocess.Popen(
+        'xrandr | grep -e "\ connected" | cut -d" " -f1',
+        shell=True, stdout=subprocess.PIPE).communicate()[0]
+    displays = output.strip().split('\n')
+    log.debug(displays)
+    return len(displays)
 
 
 def is_running(process):
@@ -195,14 +209,13 @@ def execute_once(process):
     if not is_running(process):
         execute(process)
 
+
+
 @hook.subscribe.startup
 def startup():
-    if HOSTNAME == "lt-h6-121023":
-        execute_once("nm-applet")
-        execute_once(["/home/steinn/.dotfiles/bin/dunst"])
-
-    execute_once(["xscreensaver", "-no-splash"])
-
+    # http://stackoverflow.com/questions/6442428/
+    # how-to-use-popen-to-run-backgroud-process-and-avoid-zombie
+    # signal.signal(signal.SIGCHLD, signal.SIG_IGN)
 
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
@@ -220,5 +233,12 @@ def startup():
     execute(["wmname", "LG3D"])
     execute(["synclient", "PalmDetect=1"])
 
-    xresources = os.path.expanduser("~/.Xresources")
-    execute(["xrdb", "-merge", xresources])
+    xresource = os.path.expanduser("~/.dotfiles/bin/xresource")
+    execute([xresource, "--color", "zenburn"])
+
+# def main(self):
+#     logging.basicConfig(
+#         level=logging.DEBUG, filename=os.path.expanduser("~/.qtile.log"))
+#     logging.getLogger("qtile").setLevel(logging.DEBUG)
+#     logging.getLogger("qtile.themes").setLevel(logging.DEBUG)
+#     logging.getLogger("qtile.config").setLevel(logging.DEBUG)
