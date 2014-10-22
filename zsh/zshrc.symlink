@@ -34,7 +34,7 @@ export GIT_AUTHOR_EMAIL="steinnsteinsen@gmail.com"
 export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 export EDITOR="emacsclient -nw -c"
-export PATH=$PATH:$HOME/local/bin:$HOME/.local/bin
+export PATH=$HOME/.local/bin:$PATH
 
 # Hack: 
 # Not sure where these are set (and gnome-keyring not runnig)
@@ -46,8 +46,8 @@ unset GNOME_KEYRING_CONTROL
 export LESSOPEN="|lesspipe.sh %s"
 export LESSCOLORIZER=pygmentize
 
-# start ssh keychain
-eval `dircolors $DOTFILES/dircolors/dircolors`
+# setup ls LS_COLORS env variable
+eval `dircolors $DOTFILES/dircolors/dircolors.zenburn`
 
 # aliases
 alias ls='ls --color=auto --group-directories-first -h'
@@ -60,4 +60,4 @@ alias gfr='git fetch; git rebase'
 alias e='emacsclient -t'
 alias ec='emacsclient -c'
 
-export PYTHONSTARTUP=$(python -m jedi repl)
+#####PATH=$HOME/.rvm/bin:$PATH # Add RVM to PATH for scripting
