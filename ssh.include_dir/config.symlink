@@ -8,5 +8,8 @@ SendEnv LANG LC_* GIT_*
 Host hg.python.org
      Compression yes
 
+Host bitbucket.org
+     Compression yes
+
 host *.phx
      User ssteinsen
