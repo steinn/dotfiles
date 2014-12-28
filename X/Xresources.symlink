@@ -11,62 +11,69 @@
 !#define FONT Ubuntu Mono:pixelsize=17:weight=normal:slant=normal:width=normal:spacing=100:scalable=true
 
 #define FONT Ubuntu Mono
+!#define FONT Inconsolata
+!#define FONT DejaVu Sans Mono
+!#define FONT terminus
+!#define FONT Droid Sans Mono
+!#define FONT Liberation Mono
 
 !{{{ emacs(1) settings.
-emacs.font: FONT:pixelsize=16
+emacs.font: FONT:size=26
 !}}}
 
 !{{{ XFT
-! Xft.dpi:       96
-! Xft.autohint:   0
-! Xft.lcdfilter:  lcddefault
-! Xft.hintstyle:  hintfull
-! Xft.hinting:    1
-! Xft.antialias:  1
-! Xft.rgba:       rgb
+Xft.dpi:        160
+Xft.autohint:   0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting:    1
+Xft.antialias:  1
+Xft.rgba:       rgb
 !}}}
 
 !{{{ XPDF
-xpdf*foreground:     black
-xpdf*background:     white
-xpdf*urlCommand:     /usr/bin/google-chrome %s
-xpdf*antialias:      yes
-xpdf*enableFreetype: yes
+xpdf.foreground:     black
+xpdf.background:     white
+xpdf.urlCommand:     /usr/bin/google-chrome %s
+xpdf.antialias:      yes
+xpdf.enableFreetype: yes
 !}}}
 
 !{{{ xterm
 XTerm*renderFont:    true
-XTerm*faceName:      FONT:pixelsize=17
+XTerm*faceName:      FONT:size=12
 XTerm*eightBitInput: false
 XTerm*metaSendsEscape: true
+XTerm*scrollBar:     false
 !}}} xterm
 
 !{{{ URXVT
 !
 ! General
-URxvt.font:               xft:FONT:pixelsize=17
-URxvt.letterSpace:        -1
-URxvt.lineSpace:          0
-URxvt*loginShell:         true
+#define URXVT_FONT FONT:size=12
+URxvt*font:               xft:URXVT_FONT
+URxvt*boldFont:           xft:URXVT_FONT:bold
+URxvt*letterSpace:        0
+URxvt*lineSpace:          0
+URxvt*depth:              32
+URxvt*transparent:        false
+
 URxvt*scrollBar:          false
 URxvt*secondaryScroll:    true
 URxvt*saveLines:          65535
+
+URxvt*loginShell:         false
 URxvt*cursorBlink:        false
 URxvt*urgentOnBell:       true
-URxvt.depth:              32
-URxvt.transparent:        false
-URxvt.internalBorder:     3
+URxvt*internalBorder:     3
+URxvt*boarderLess:        true
 
 ! Disable ctrl+shift keybinding
-URxvt*iso14755:           false
+URxvt.iso14755:           false
 
 ! Extensions
-URxvt.perl-lib:             /usr/lib/urxvt/perl/
-URxvt.perl-ext:             default,url-select,searchable-scrollback
-URxvt.url-select.launcher:  /usr/bin/google-chrome
-URxvt.url-select.underline: true
-URxvt.colorUL:              #ffffff
-URxvt.keysym.M-u:           perl:url-select:select_next
+URxvt.perl-lib:             /usr/lib64/urxvt/perl/
+URxvt.perl-ext:             default,searchable-scrollback
 
 !}}} URXVT
 
