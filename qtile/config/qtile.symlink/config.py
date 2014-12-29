@@ -27,7 +27,6 @@ keys = [
     Key([mod_key, "control"], "k", lazy.layout.client_to_next()),
     Key([mod_key, "control"], "j", lazy.layout.client_to_previous()),
 
-
     # Stack Layout
     # Switch window focus to other pane(s) of stack
     Key([mod_key], "space", lazy.layout.next()),
@@ -50,9 +49,16 @@ keys = [
     Key([mod_key, "shift"], "c", lazy.window.kill()),
 
     # Volume
-    Key([], "XF86AudioRaiseVolume", lazy.spawn("/usr/bin/vol_up")),
-    Key([], "XF86AudioLowerVolume", lazy.spawn("/usr/bin/vol_down")),
-    Key([], "XF86AudioMute", lazy.spawn("/usr/bin/vol_toggle")),
+    Key([], "XF86AudioRaiseVolume",
+        lazy.spawn("amixer -D pulse set Master 1%+")),
+    Key([], "XF86AudioLowerVolume",
+        lazy.spawn("amixer -D pulse set Master 1%-")),
+    Key([], "XF86AudioMute",
+        lazy.spawn("amixer -D pulse set Master toggle")),
+
+
+    Key([], "XF86MonBrightnessUp", lazy.spawn("xbacklight +2")),
+    Key([], "XF86MonBrightnessDown", lazy.spawn("xbacklight -2")),
 
     # Lock Screen
     Key([mod_key, "shift"], "l",
@@ -97,36 +103,43 @@ layouts = [
     # layout.Zoomy(),
 ]
 
-widget_defaults = {"fontsize": 14,
-                   "padding": 3,
-                   "font": "Ubuntu Mono Bold"}
+widget_defaults = {
+    "font": "Ubuntu Mono",
+    "fontsize": 28,
+    "padding": 3,
+}
 
 primary_widgets = [
     widget.GroupBox(padding=0),
-    widget.sep.Sep(),
     widget.CurrentLayout(),
-    widget.sep.Sep(),
-    #widget.WindowName(fontsize=12),
+    #widget.WindowName(),
+    #widget.WindowTabs(),
+    widget.TaskList(fontsize=20),
     widget.Prompt(),
-    widget.Spacer(),
     widget.CPUGraph(line_width=1.5,
-                    width=100),
+                    width=150),
     widget.MemoryGraph(graph_color="#ff0000",
                        line_width=1.5,
                        samples=100,
-                       width=100),
-    widget.NetGraph(graph_color="#ffff00",
+                       width=150),
+    widget.HDDBusyGraph(graph_color="#ffff00",
+                        line_width=1.5,
+                        width=150),
+    widget.NetGraph(graph_color="#ffffff",
                     line_width=1.5,
-                    width=100),
-    widget.sep.Sep(),
-    widget.Volume(),
-    widget.sep.Sep(),
-    widget.Battery(update_delay=5, foreground="#00ff00"),
-    widget.sep.Sep(),
-    widget.Systray(icon_size=15, padding=2),
-    widget.sep.Sep(),
-    widget.Clock('%H:%M', timezone="UTC"),
-    widget.sep.Sep(),
+                    width=75,
+                    bandwith_type="down"),
+    widget.NetGraph(graph_color="#ff00ff",
+                    line_width=1.5,
+                    width=75,
+                    bandwidth_type="up"),
+    widget.Volume(cardid=1),
+    widget.Battery(update_delay=5, foreground="#00ff00",
+                   format=u"{char}{percent:2.0%} {hour:d}:{min:02d}",
+                   discharge_char=u"\U00002193",  # ARROW DOWN
+                   charge_char=u"\U00002191",     # ARROW UP
+                   low_percentage=0.15),
+    widget.Systray(icon_size=40, padding=2),
     widget.Clock('%H:%M:%S %d/%m'),
 ]
 
@@ -137,13 +150,11 @@ secondary_widgets = [
     widget.sep.Sep(),
     widget.Spacer(),
     #widget.WindowName(),
-    widget.Clock('%H:%M', timezone="UTC"),
-    widget.sep.Sep(),
     widget.Clock('%H:%M:%S %d/%m'),
 ]
 
-primary_bar = bar.Bar(primary_widgets, 20)
-secondary_bar = bar.Bar(secondary_widgets, 20)
+primary_bar = bar.Bar(primary_widgets, 32)
+secondary_bar = bar.Bar(secondary_widgets, 32)
 
 screens = [
     Screen(top=primary_bar),
