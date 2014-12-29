@@ -35,12 +35,6 @@ export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 export EDITOR="emacsclient -nw -c"
 export PATH=$HOME/.local/bin:$PATH
 
-# # Hack:
-# # Not sure where these are set (and gnome-keyring not runnig)
-# # but ssh prints warning about
-# unset GNOME_KEYRING_PID
-# unset GNOME_KEYRING_CONTROL
-
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export LESSOPEN="|lesspipe.sh %s"
 
