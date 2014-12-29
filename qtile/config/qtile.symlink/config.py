@@ -228,6 +228,8 @@ def startup():
     # how-to-use-popen-to-run-backgroud-process-and-avoid-zombie
     # signal.signal(signal.SIGCHLD, signal.SIG_IGN)
 
+    execute_once("nm-applet")
+
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
     # Set caps lock as left ctrl
