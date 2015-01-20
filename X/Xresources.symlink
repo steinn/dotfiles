@@ -58,22 +58,24 @@ URxvt*lineSpace:          0
 URxvt*depth:              32
 URxvt*transparent:        false
 
+URxvt*boarderLess:        true
+URxvt*cursorBlink:        false
+URxvt*internalBorder:     3
+URxvt*loginShell:         true
+URxvt*saveLines:          65535
 URxvt*scrollBar:          false
 URxvt*secondaryScroll:    true
-URxvt*saveLines:          65535
-
-URxvt*loginShell:         false
-URxvt*cursorBlink:        false
 URxvt*urgentOnBell:       true
-URxvt*internalBorder:     3
-URxvt*boarderLess:        true
+URxvt*visualBell:         false
 
 ! Disable ctrl+shift keybinding
 URxvt.iso14755:           false
 
 ! Extensions
 URxvt.perl-lib:             /usr/lib64/urxvt/perl/
-URxvt.perl-ext:             default,searchable-scrollback
+URxvt.perl-ext:             default,searchable-scrollback,selection-to-clipboard,bell-command
+
+! URxvt.bell-command: notify-send "Beep, Beep"
 
 !}}} URXVT
 
