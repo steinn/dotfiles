@@ -15,26 +15,21 @@ plugins=(
     jsontools
     pip
     screen
-    ssh-agent
     sudo
     systemd
     themes
     yum
 )
+# ssh-agent
 source $ZSH/oh-my-zsh.sh
 unsetopt correct_all
+setopt nohashdirs
 
 # My customization
 export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT=MToolkit
-
-export GIT_AUTHOR_NAME="Steinn Steinsen"
-export GIT_AUTHOR_EMAIL="steinnsteinsen@gmail.com"
-export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 export EDITOR="emacsclient -nw -c"
 export PATH=$HOME/.local/bin:$PATH
-
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export LESSOPEN="|lesspipe.sh %s"
 
@@ -53,3 +48,9 @@ alias e='emacsclient -t'
 alias ec='emacsclient -c'
 
 alias p=pwd
+
+
+which virtualenvwrapper.sh > /dev/null 2>&1
+if [[ $? -eq 0 ]]; then
+    source $(which virtualenvwrapper.sh)
+fi
