@@ -1,9 +1,9 @@
 import logging
 import os
 
-logging.basicConfig(
-    level=logging.DEBUG, filename=os.path.expanduser("~/.qtile.log"))
-logging.getLogger("qtile").setLevel(logging.INFO)
+# logging.basicConfig(
+#     level=logging.DEBUG, filename=os.path.expanduser("~/.qtile.log"))
+# logging.getLogger("qtile").setLevel(logging.INFO)
 
 from libqtile.config import Drag, Click, Key, Group
 from libqtile.manager import Screen
@@ -12,7 +12,10 @@ from libqtile import layout, bar, widget
 
 #from system import get_num_monitors
 
-log = logging.getLogger("qtile.config")
+#log = logging.getLogger("qtile.config")
+
+# Find urxvt binary and if not found use xterm
+
 
 mod_key = "mod4"
 keys = [
@@ -20,6 +23,7 @@ keys = [
     Key([mod_key], "Tab",    lazy.nextlayout()),
 
     # Switch between windows in current stack pane
+
     Key([mod_key], "k", lazy.layout.up()),
     Key([mod_key], "j", lazy.layout.down()),
     Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
@@ -31,7 +35,7 @@ keys = [
     # Switch window focus to other pane(s) of stack
     Key([mod_key], "space", lazy.layout.next()),
     # Swap panes of split stack
-    Key([mod_key, "shift"], "space", lazy.layout.rotate()),
+    Key([mod_key], "l", lazy.layout.rotate()),
     # Toggle between split and unsplit sides of stack.
     Key([mod_key, "shift"], "Return", lazy.layout.toggle_split()),
 
@@ -40,13 +44,13 @@ keys = [
     Key([mod_key], "p", lazy.spawncmd()),
 
     # Screen focus
-    Key([mod_key], "w", lazy.to_screen(1)),
     Key([mod_key], "e", lazy.to_screen(0)),
+    Key([mod_key], "w", lazy.to_screen(1)),
 
     # Misc
     Key([mod_key, "control"], "q", lazy.shutdown()),
     Key([mod_key, "control"], "r", lazy.restart()),
-    Key([mod_key, "shift"], "c", lazy.window.kill()),
+    Key([mod_key, "control"], "c", lazy.window.kill()),
 
     # Volume
     Key([], "XF86AudioRaiseVolume",
@@ -61,8 +65,7 @@ keys = [
     Key([], "XF86MonBrightnessDown", lazy.spawn("xbacklight -2")),
 
     # Lock Screen
-    Key([mod_key, "shift"], "l",
-        lazy.spawn("$HOME/.dotfiles/bin/lock_screen")),
+    Key([mod_key], "Escape", lazy.spawn("$HOME/.dotfiles/bin/lock_screen")),
 ]
 
 
@@ -145,11 +148,8 @@ primary_widgets = [
 
 secondary_widgets = [
     widget.GroupBox(padding=0),
-    widget.sep.Sep(),
     widget.CurrentLayout(),
-    widget.sep.Sep(),
-    widget.Spacer(),
-    #widget.WindowName(),
+    widget.TaskList(fontsize=20),
     widget.Clock('%H:%M:%S %d/%m'),
 ]
 
@@ -196,7 +196,7 @@ def get_num_monitors():
         'xrandr | grep -e "\ connected" | cut -d" " -f1',
         shell=True, stdout=subprocess.PIPE).communicate()[0]
     displays = output.strip().split('\n')
-    log.debug(displays)
+    #log.debug(displays)
     return len(displays)
 
 
@@ -221,14 +221,19 @@ def execute_once(process):
         execute(process)
 
 
+@hook.subscribe.startup_once
+def startup_once():
+    execute("xscreensaver -no-splash")
+    execute("nm-applet")
+    execute("dunst")
+    execute("rescuetime")
+
 
 @hook.subscribe.startup
 def startup():
     # http://stackoverflow.com/questions/6442428/
     # how-to-use-popen-to-run-backgroud-process-and-avoid-zombie
-    # signal.signal(signal.SIGCHLD, signal.SIG_IGN)
-
-    execute_once("nm-applet")
+    #signal.signal(signal.SIGCHLD, signal.SIG_IGN)
 
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
@@ -243,7 +248,7 @@ def startup():
     execute(["xset", "b", "off"])
     execute(["xsetroot", "-cursor_name", "left_ptr"])
     execute(["xsetroot", "-solid", "black"])
-    execute(["wmname", "LG3D"])
+    #<execute(["wmname", "LG3D"])
     execute(["synclient", "PalmDetect=1"])
 
     xresource = os.path.expanduser("~/.dotfiles/bin/xresource")
