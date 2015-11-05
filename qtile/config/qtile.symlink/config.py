@@ -24,14 +24,28 @@ keys = [
 
     # Switch between windows in current stack pane
 
-    Key([mod_key], "k", lazy.layout.up()),
+    Key([mod_key], "h", lazy.layout.left()),
+    Key([mod_key], "l", lazy.layout.right()),
     Key([mod_key], "j", lazy.layout.down()),
-    Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
+    Key([mod_key], "k", lazy.layout.up()),
+    Key([mod_key, "shift"], "h", lazy.layout.swap_left()),
+    Key([mod_key, "shift"], "l", lazy.layout.swap_right()),
     Key([mod_key, "shift"], "j", lazy.layout.shuffle_down()),
-    Key([mod_key, "control"], "k", lazy.layout.client_to_next()),
-    Key([mod_key, "control"], "j", lazy.layout.client_to_previous()),
+    Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
+    Key([mod_key], "i", lazy.layout.grow()),
+    Key([mod_key], "m", lazy.layout.shrink()),
+    Key([mod_key], "n", lazy.layout.normalize()),
+    Key([mod_key], "o", lazy.layout.maximize()),
+    Key([mod_key], "f", lazy.layout.flip()),
 
     # Stack Layout
+    # Key([mod_key], "k", lazy.layout.down()),
+    # Key([mod_key], "j", lazy.layout.up()),
+    # Key([mod_key, "shift"], "k", lazy.layout.shuffle_down()),
+    # Key([mod_key, "shift"], "j", lazy.layout.shuffle_up()),
+    # Key([mod_key, "control"], "k", lazy.layout.client_to_next()),
+    # Key([mod_key, "control"], "j", lazy.layout.client_to_previous()),
+
     # Switch window focus to other pane(s) of stack
     Key([mod_key], "space", lazy.layout.next()),
     # Swap panes of split stack
@@ -248,11 +262,14 @@ def startup():
     execute(["xset", "b", "off"])
     execute(["xsetroot", "-cursor_name", "left_ptr"])
     execute(["xsetroot", "-solid", "black"])
-    #<execute(["wmname", "LG3D"])
+    # execute(["wmname", "LG3D"])
     execute(["synclient", "PalmDetect=1"])
 
     xresource = os.path.expanduser("~/.dotfiles/bin/xresource")
     execute([xresource, "--color", "zenburn"])
+
+    background = os.path.expanduser("~/.config/qtile/team-quizup_2560x1440-02.png")
+    execute(["feh", "--bg-scale", background])
 
 # def main(self):
 #     logging.basicConfig(
