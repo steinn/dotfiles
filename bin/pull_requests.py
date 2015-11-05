@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# pip install github3.py
+# pip install --pre github3.py
 
 import argparse
 from github3 import login
