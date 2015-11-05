@@ -7,12 +7,14 @@ ZSH_THEME="steinn"
 ZSH_CUSTOM=$DOTFILES/zsh/custom
 COMPLETION_WAITING_DOTS="true"
 plugins=(
+    colored-man-pages
     colorize
     docker
     encode64
     git
     history
     jsontools
+    mvn
     pip
     screen
     sudo
@@ -47,8 +49,9 @@ alias gfr='git fetch; git rebase'
 alias e='emacsclient -t'
 alias ec='emacsclient -c'
 
-alias p=pwd
-
+alias start='systemctl start'
+alias stop='systemctl stop'
+alias restart='systemctl restart'
 
 which virtualenvwrapper.sh > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
