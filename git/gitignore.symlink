@@ -2,3 +2,7 @@
 .ropeproject
 .projectile
 .dir-locals.el
+.classpath
+.project
+.settings/
+.idea/
