@@ -7,11 +7,14 @@ ZSH_THEME="steinn"
 ZSH_CUSTOM=$DOTFILES/zsh/custom
 COMPLETION_WAITING_DOTS="true"
 plugins=(
+    autojump
+    bgnotify
     colored-man-pages
     colorize
     docker
     encode64
     git
+    go
     history
     jsontools
     mvn
@@ -21,6 +24,7 @@ plugins=(
     systemd
     themes
     yum
+    z
 )
 # ssh-agent
 source $ZSH/oh-my-zsh.sh
@@ -57,3 +61,5 @@ which virtualenvwrapper.sh > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     source $(which virtualenvwrapper.sh)
 fi
+
+export GOPATH="$HOME/go"
