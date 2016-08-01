@@ -41,7 +41,7 @@ xpdf.enableFreetype: yes
 
 !{{{ xterm
 XTerm*renderFont:    true
-XTerm*faceName:      FONT:size=12
+XTerm*faceName:      FONT:pixelsize=30
 XTerm*eightBitInput: false
 XTerm*metaSendsEscape: true
 XTerm*scrollBar:     false
@@ -50,9 +50,9 @@ XTerm*scrollBar:     false
 !{{{ URXVT
 !
 ! General
-#define URXVT_FONT FONT:size=12
-URxvt*font:               xft:URXVT_FONT
-URxvt*boldFont:           xft:URXVT_FONT:bold
+#define URXVT_FONT FONT:pixelsize=30
+URxvt*font:               xft:URXVT_FONT,style=regular
+URxvt*boldFont:           xft:URXVT_FONT:bold,style=regular
 URxvt*letterSpace:        0
 URxvt*lineSpace:          0
 URxvt*depth:              32
