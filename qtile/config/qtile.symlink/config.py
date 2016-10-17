@@ -157,14 +157,14 @@ primary_widgets = [
                    charge_char=u"\U00002191",     # ARROW UP
                    low_percentage=0.15),
     widget.Systray(icon_size=40, padding=2),
-    widget.Clock('%H:%M:%S %d/%m'),
+    widget.Clock(format='%H:%M:%S %d/%m'),
 ]
 
 secondary_widgets = [
     widget.GroupBox(padding=0),
     widget.CurrentLayout(),
     widget.TaskList(fontsize=20),
-    widget.Clock('%H:%M:%S %d/%m'),
+    widget.Clock(format='%H:%M:%S %d/%m'),
 ]
 
 primary_bar = bar.Bar(primary_widgets, 32)
@@ -225,7 +225,7 @@ def is_running(process):
 
 
 def execute(process):
-    if isinstance(process, basestring):
+    if isinstance(process, str):
         process = process.split()
     return subprocess.Popen(process)
 
@@ -240,7 +240,7 @@ def startup_once():
     execute("xscreensaver -no-splash")
     execute("nm-applet")
     execute("dunst")
-    execute("rescuetime")
+    #execute("rescuetime")
 
 
 @hook.subscribe.startup
