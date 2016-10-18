@@ -48,7 +48,3 @@
 
         orgchangelog = log --format='** %s%n  Author:%an%n%n  Commit:%h%n%n  %b' --abbrev-commit  HEAD ^master
 
-
-
-[init]
-	templatedir = ~/.git_template
