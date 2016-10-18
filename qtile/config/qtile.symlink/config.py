@@ -1,70 +1,49 @@
-import logging
 import os
-
-# logging.basicConfig(
-#     level=logging.DEBUG, filename=os.path.expanduser("~/.qtile.log"))
-# logging.getLogger("qtile").setLevel(logging.INFO)
+import re
+import signal
+import subprocess
 
 from libqtile.config import Drag, Click, Key, Group
 from libqtile.manager import Screen
 from libqtile.command import lazy
 from libqtile import layout, bar, widget
-
-#from system import get_num_monitors
-
-#log = logging.getLogger("qtile.config")
-
-# Find urxvt binary and if not found use xterm
-
+from libqtile import hook
 
 mod_key = "mod4"
 keys = [
     # Toggle between different layouts as defined below
-    Key([mod_key], "Tab",    lazy.nextlayout()),
+    Key([mod_key], "space",    lazy.next_layout()),
 
-    # Switch between windows in current stack pane
-
-    Key([mod_key], "h", lazy.layout.left()),
-    Key([mod_key], "l", lazy.layout.right()),
     Key([mod_key], "j", lazy.layout.down()),
     Key([mod_key], "k", lazy.layout.up()),
-    Key([mod_key, "shift"], "h", lazy.layout.swap_left()),
-    Key([mod_key, "shift"], "l", lazy.layout.swap_right()),
+    Key([mod_key], "Tab", lazy.layout.next()),
+    Key([mod_key, "shift"], "Tab", lazy.layout.next()),
     Key([mod_key, "shift"], "j", lazy.layout.shuffle_down()),
     Key([mod_key, "shift"], "k", lazy.layout.shuffle_up()),
-    Key([mod_key], "i", lazy.layout.grow()),
-    Key([mod_key], "m", lazy.layout.shrink()),
+    Key([mod_key], "m", lazy.layout.maximize()),
     Key([mod_key], "n", lazy.layout.normalize()),
-    Key([mod_key], "o", lazy.layout.maximize()),
-    Key([mod_key], "f", lazy.layout.flip()),
 
-    # Stack Layout
-    # Key([mod_key], "k", lazy.layout.down()),
-    # Key([mod_key], "j", lazy.layout.up()),
-    # Key([mod_key, "shift"], "k", lazy.layout.shuffle_down()),
-    # Key([mod_key, "shift"], "j", lazy.layout.shuffle_up()),
-    # Key([mod_key, "control"], "k", lazy.layout.client_to_next()),
-    # Key([mod_key, "control"], "j", lazy.layout.client_to_previous()),
+    # Key([mod_key], "Left", lazy.layout.grow()),
+    # Key([mod_key], "m", lazy.layout.shrink()),
 
-    # Switch window focus to other pane(s) of stack
-    Key([mod_key], "space", lazy.layout.next()),
-    # Swap panes of split stack
-    Key([mod_key], "l", lazy.layout.rotate()),
-    # Toggle between split and unsplit sides of stack.
-    Key([mod_key, "shift"], "Return", lazy.layout.toggle_split()),
-
-    # Spawn commands
-    Key([mod_key], "Return", lazy.spawn("urxvt")),
-    Key([mod_key], "p", lazy.spawncmd()),
+    # Key([mod_key, "shift"], "h", lazy.layout.swap_left()),
+    # Key([mod_key, "shift"], "l", lazy.layout.swap_right()),
+    # Key([mod_key], "h", lazy.layout.left()),
+    # Key([mod_key], "l", lazy.layout.right()),
+    # Key([mod_key], "f", lazy.layout.flip()),
 
     # Screen focus
     Key([mod_key], "e", lazy.to_screen(0)),
     Key([mod_key], "w", lazy.to_screen(1)),
 
-    # Misc
+    # Qtile controls
     Key([mod_key, "control"], "q", lazy.shutdown()),
     Key([mod_key, "control"], "r", lazy.restart()),
     Key([mod_key, "control"], "c", lazy.window.kill()),
+
+    # Spawn commands
+    Key([mod_key], "Return", lazy.spawn("urxvt")),
+    Key([mod_key], "p", lazy.spawncmd()),
 
     # Volume
     Key([], "XF86AudioRaiseVolume",
@@ -74,36 +53,28 @@ keys = [
     Key([], "XF86AudioMute",
         lazy.spawn("amixer -D pulse set Master toggle")),
 
-
-    Key([], "XF86MonBrightnessUp", lazy.spawn("xbacklight +2")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn("xbacklight -2")),
+    # Backlight
+    Key([], "XF86MonBrightnessUp", lazy.spawn(
+        os.path.expanduser("~/.dotfiles/bin/light -A 5"))),
+    Key([], "XF86MonBrightnessDown", lazy.spawn(
+        os.path.expanduser("~/.dotfiles/bin/light -U 5"))),
 
     # Lock Screen
-    Key([mod_key], "Escape", lazy.spawn("$HOME/.dotfiles/bin/lock_screen")),
+    Key([mod_key], "Escape", lazy.spawn(
+        os.path.expanduser("~/.dotfiles/bin/lock_screen"))),
+
+    # keyboard layout switch
+    Key([mod_key], "i", lazy.widget["keyboardlayout"].next_keyboard())
 ]
 
 
-groups = [
-    Group("1"),
-    Group("2"),
-    Group("3"),
-    Group("4"),
-    Group("5"),
-    Group("6"),
-    Group("7"),
-    Group("8"),
-    Group("9"),
-    Group("0"),
-    #Group("8", persist=False, init=False),
-    # Group("9", persist=False, init=False),
-]
+groups = [Group(g) for g in "1234567890"]
 
 for i in groups:
     # mod + letter of group = switch to group
     keys.append(
         Key([mod_key], i.name, lazy.group[i.name].toscreen())
     )
-
     # mod + shift + letter of group = switch to & move focused window to group
     keys.append(
         Key([mod_key, "shift"], i.name, lazy.window.togroup(i.name))
@@ -112,13 +83,9 @@ for i in groups:
 layouts = [
     layout.Max(),
     layout.Stack(stacks=2),
-    # layout.Floating(),
-    # layout.MonadTall(),
-    # layout.RatioTile(),
-    # layout.Slice("left", 256),
-    # layout.TreeTab(),
-    # layout.Zoomy(),
+    layout.verticaltile.VerticalTile()
 ]
+
 
 widget_defaults = {
     "font": "Ubuntu Mono",
@@ -127,30 +94,15 @@ widget_defaults = {
 }
 
 primary_widgets = [
-    widget.GroupBox(padding=0),
+    widget.CurrentScreen(),
+    widget.GroupBox(padding=0, disable_drag=True),
     widget.CurrentLayout(),
-    #widget.WindowName(),
-    #widget.WindowTabs(),
     widget.TaskList(fontsize=20),
     widget.Prompt(),
     widget.CPUGraph(line_width=1.5,
                     width=150),
-    widget.MemoryGraph(graph_color="#ff0000",
-                       line_width=1.5,
-                       samples=100,
-                       width=150),
-    widget.HDDBusyGraph(graph_color="#ffff00",
-                        line_width=1.5,
-                        width=150),
-    widget.NetGraph(graph_color="#ffffff",
-                    line_width=1.5,
-                    width=75,
-                    bandwith_type="down"),
-    widget.NetGraph(graph_color="#ff00ff",
-                    line_width=1.5,
-                    width=75,
-                    bandwidth_type="up"),
-    widget.Volume(cardid=1),
+    widget.KeyboardLayout(configured_keyboards=["us", "is"]),
+    widget.Volume(),
     widget.Battery(update_delay=5, foreground="#00ff00",
                    format=u"{char}{percent:2.0%} {hour:d}:{min:02d}",
                    discharge_char=u"\U00002193",  # ARROW DOWN
@@ -174,8 +126,6 @@ screens = [
     Screen(top=primary_bar),
 ]
 screens.append(Screen(top=secondary_bar))
-#if get_num_monitors() > 1:
-
 
 main = None
 follow_mouse_focus = True
@@ -189,29 +139,6 @@ mouse = [
          start=lazy.window.get_size()),
     Click([mod_key], "Button2", lazy.window.bring_to_front())
 ]
-
-import os
-import signal
-
-from libqtile import hook
-
-import logging
-import platform
-import re
-import subprocess
-
-log = logging.getLogger("qtile.config.system")
-
-hostname = platform.node()
-
-
-def get_num_monitors():
-    output = subprocess.Popen(
-        'xrandr | grep -e "\ connected" | cut -d" " -f1',
-        shell=True, stdout=subprocess.PIPE).communicate()[0]
-    displays = output.strip().split('\n')
-    #log.debug(displays)
-    return len(displays)
 
 
 def is_running(process):
@@ -245,10 +172,6 @@ def startup_once():
 
 @hook.subscribe.startup
 def startup():
-    # http://stackoverflow.com/questions/6442428/
-    # how-to-use-popen-to-run-backgroud-process-and-avoid-zombie
-    #signal.signal(signal.SIGCHLD, signal.SIG_IGN)
-
     # Toggle layout change with menu key and use caps lock led to
     # indicate what layout is on (on - is, off - us).
     # Set caps lock as left ctrl
@@ -262,7 +185,6 @@ def startup():
     execute(["xset", "b", "off"])
     execute(["xsetroot", "-cursor_name", "left_ptr"])
     execute(["xsetroot", "-solid", "black"])
-    # execute(["wmname", "LG3D"])
     execute(["synclient", "PalmDetect=1"])
 
     xresource = os.path.expanduser("~/.dotfiles/bin/xresource")
@@ -270,10 +192,3 @@ def startup():
 
     background = os.path.expanduser("~/.config/qtile/team-quizup_2560x1440-02.png")
     execute(["feh", "--bg-scale", background])
-
-# def main(self):
-#     logging.basicConfig(
-#         level=logging.DEBUG, filename=os.path.expanduser("~/.qtile.log"))
-#     logging.getLogger("qtile").setLevel(logging.DEBUG)
-#     logging.getLogger("qtile.themes").setLevel(logging.DEBUG)
-#     logging.getLogger("qtile.config").setLevel(logging.DEBUG)
