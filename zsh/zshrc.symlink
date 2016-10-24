@@ -1,5 +1,5 @@
 DOTFILES=$HOME/.dotfiles
-export PATH=$PATH:$DOTFILES/bin
+export PATH=$DOTFILES/bin:$PATH
 
 # Configure oh-my-zsh
 ZSH=$DOTFILES/zsh/oh-my-zsh
