@@ -1,5 +1,5 @@
 DOTFILES=$HOME/.dotfiles
-export PATH=$DOTFILES/bin:$PATH
+export PATH="$DOTFILES/bin":"$HOME/.local/bin":$PATH
 
 # Configure oh-my-zsh
 ZSH=$DOTFILES/zsh/oh-my-zsh
@@ -8,6 +8,7 @@ ZSH_CUSTOM=$DOTFILES/zsh/custom
 COMPLETION_WAITING_DOTS="true"
 plugins=(
     autojump
+    aws
     bgnotify
     colored-man-pages
     colorize
@@ -17,6 +18,7 @@ plugins=(
     go
     history
     jsontools
+    kubectl
     mvn
     pip
     screen
@@ -35,7 +37,6 @@ setopt nohashdirs
 export _JAVA_AWT_WM_NONREPARENTING=1
 export AWT_TOOLKIT=MToolkit
 export EDITOR="emacsclient -nw -c"
-export PATH=$HOME/.local/bin:$PATH
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export LESSOPEN="|lesspipe.sh %s"
 
@@ -53,13 +54,27 @@ alias gfr='git fetch; git rebase'
 alias e='emacsclient -t'
 alias ec='emacsclient -c'
 
-alias start='systemctl start'
-alias stop='systemctl stop'
-alias restart='systemctl restart'
+alias pants-dev='PYTHONPATH=/home/steinn/src/pants/src/python:/home/steinn/src/pants/contrib/node/src/python /home/steinn/.virtualenvs/pants1.3.0/bin/python /home/steinn/src/pants/src/python/pants/bin/pants_exe.py'
+
+alias kc=kubectl
 
 which virtualenvwrapper.sh > /dev/null 2>&1
 if [[ $? -eq 0 ]]; then
     source $(which virtualenvwrapper.sh)
 fi
 
-export GOPATH="$HOME/go"
+
+# This is in .profile so emacs can pick this use this with out ugly code.
+# export GOROOT="$HOME/go"
+# export GOBIN="$GOROOT/bin"
+# export GOPATH="$HOME/gopath"
+# export PATH="$PATH:$GOBIN"
+
+# OPAM configuration
+. /home/steinn/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+. ~/.awsrc
+
+source <(awless completion zsh)
+
+PATH=$PATH:/usr/share/sbt/bin/
