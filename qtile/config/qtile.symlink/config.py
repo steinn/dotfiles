@@ -33,8 +33,8 @@ keys = [
     # Key([mod_key], "f", lazy.layout.flip()),
 
     # Screen focus
-    Key([mod_key], "e", lazy.to_screen(0)),
-    Key([mod_key], "w", lazy.to_screen(1)),
+    Key([mod_key], "e", lazy.to_screen(1)),
+    Key([mod_key], "w", lazy.to_screen(0)),
 
     # Qtile controls
     Key([mod_key, "control"], "q", lazy.shutdown()),
@@ -42,7 +42,7 @@ keys = [
     Key([mod_key, "control"], "c", lazy.window.kill()),
 
     # Spawn commands
-    Key([mod_key], "Return", lazy.spawn("urxvt")),
+    Key([mod_key], "Return", lazy.spawn("urxvt256c")),
     Key([mod_key], "p", lazy.spawncmd()),
 
     # Volume
@@ -113,6 +113,7 @@ primary_widgets = [
 ]
 
 secondary_widgets = [
+    widget.CurrentScreen(),
     widget.GroupBox(padding=0),
     widget.CurrentLayout(),
     widget.TaskList(fontsize=20),
@@ -167,6 +168,7 @@ def startup_once():
     execute("xscreensaver -no-splash")
     execute("nm-applet")
     execute("dunst")
+    execute(["redshift-gtk"])
     #execute("rescuetime")
 
 
@@ -185,7 +187,7 @@ def startup():
     execute(["xset", "b", "off"])
     execute(["xsetroot", "-cursor_name", "left_ptr"])
     execute(["xsetroot", "-solid", "black"])
-    execute(["synclient", "PalmDetect=1"])
+    # execute(["synclient", "PalmDetect=1"])
 
     xresource = os.path.expanduser("~/.dotfiles/bin/xresource")
     execute([xresource, "--color", "zenburn"])
