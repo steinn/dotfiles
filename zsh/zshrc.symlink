@@ -1,5 +1,4 @@
-DOTFILES=$HOME/.dotfiles
-export PATH="$DOTFILES/bin":"$HOME/.local/bin":$PATH
+# See .zshenv for DOTFILES and PATH
 
 # Configure oh-my-zsh
 ZSH=$DOTFILES/zsh/oh-my-zsh
@@ -9,7 +8,7 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(
     autojump
     aws
-    bgnotify
+    #bgnotify
     colored-man-pages
     colorize
     docker
@@ -34,17 +33,17 @@ unsetopt correct_all
 setopt nohashdirs
 
 # My customization
-export _JAVA_AWT_WM_NONREPARENTING=1
-export AWT_TOOLKIT=MToolkit
+# export _JAVA_AWT_WM_NONREPARENTING=1
+# export AWT_TOOLKIT=MToolkit
 export EDITOR="emacsclient -nw -c"
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-export LESSOPEN="|lesspipe.sh %s"
+# export LESSOPEN="|lesspipe.sh %s"
 
 # setup ls LS_COLORS env variable
-eval `dircolors $DOTFILES/dircolors/dircolors.zenburn`
+# eval `dircolors $DOTFILES/dircolors/dircolors.zenburn`
 
 # aliases
-alias ls='ls --color=auto --group-directories-first -h'
+# alias ls='ls --color=auto --group-directories-first -h'
 
 alias gs='git status'
 alias gf='git fetch'
@@ -54,8 +53,6 @@ alias gfr='git fetch; git rebase'
 alias e='emacsclient -t'
 alias ec='emacsclient -c'
 
-alias pants-dev='PYTHONPATH=/home/steinn/src/pants/src/python:/home/steinn/src/pants/contrib/node/src/python /home/steinn/.virtualenvs/pants1.3.0/bin/python /home/steinn/src/pants/src/python/pants/bin/pants_exe.py'
-
 alias kc=kubectl
 
 which virtualenvwrapper.sh > /dev/null 2>&1
@@ -63,18 +60,10 @@ if [[ $? -eq 0 ]]; then
     source $(which virtualenvwrapper.sh)
 fi
 
-
-# This is in .profile so emacs can pick this use this with out ugly code.
-# export GOROOT="$HOME/go"
-# export GOBIN="$GOROOT/bin"
-# export GOPATH="$HOME/gopath"
-# export PATH="$PATH:$GOBIN"
-
 # OPAM configuration
-. /home/steinn/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+#. /home/steinn/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+. /Users/steinn/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-. ~/.awsrc
+# . ~/.awsrc
 
-source <(awless completion zsh)
-
-PATH=$PATH:/usr/share/sbt/bin/
+# source <(awless completion zsh)
