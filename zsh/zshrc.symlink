@@ -6,9 +6,7 @@ ZSH_THEME="steinn"
 ZSH_CUSTOM=$DOTFILES/zsh/custom
 COMPLETION_WAITING_DOTS="true"
 plugins=(
-    autojump
     aws
-    #bgnotify
     colored-man-pages
     colorize
     docker
@@ -16,34 +14,40 @@ plugins=(
     git
     go
     history
-    jsontools
     kubectl
-    mvn
-    pip
     screen
-    sudo
     systemd
     themes
-    yum
     z
 )
-# ssh-agent
+if [[ $(uname) == 'Linux' ]]; then
+    plugins+=( bgnotify )
+fi
+
 source $ZSH/oh-my-zsh.sh
 unsetopt correct_all
 setopt nohashdirs
 
 # My customization
-# export _JAVA_AWT_WM_NONREPARENTING=1
-# export AWT_TOOLKIT=MToolkit
+
+if [[ $(uname) == 'Linux' ]]; then
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export AWT_TOOLKIT=MToolkit
+    export LESSOPEN="|lesspipe.sh %s"
+
+    # setup ls LS_COLORS env variable
+    eval `dircolors $DOTFILES/dircolors/dircolors.zenburn`
+
+    # linux specific aliases
+    alias ls='ls --color=auto --group-directories-first -h'
+fi
+
+if [[ $(uname) == 'Darwin' ]]; then
+    # Mac specific things
+fi
+
 export EDITOR="emacsclient -nw -c"
 export VIRTUAL_ENV_DISABLE_PROMPT=1
-# export LESSOPEN="|lesspipe.sh %s"
-
-# setup ls LS_COLORS env variable
-# eval `dircolors $DOTFILES/dircolors/dircolors.zenburn`
-
-# aliases
-# alias ls='ls --color=auto --group-directories-first -h'
 
 alias gs='git status'
 alias gf='git fetch'
@@ -61,9 +65,4 @@ if [[ $? -eq 0 ]]; then
 fi
 
 # OPAM configuration
-#. /home/steinn/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-. /Users/steinn/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
-
-# . ~/.awsrc
-
-# source <(awless completion zsh)
+. "${HOME}/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null || true
