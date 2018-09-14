@@ -15,9 +15,6 @@
 	editor = emacsclient -t
 	excludesfile = /home/steinn/.gitignore
 
-[push]
-	default = matching
-
 [alias]
 	ai = add --interactive
 	a  = add
@@ -48,3 +45,8 @@
 
         orgchangelog = log --format='** %s%n  Author:%an%n%n  Commit:%h%n%n  %b' --abbrev-commit  HEAD ^master
 
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
