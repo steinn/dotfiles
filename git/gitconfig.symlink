@@ -12,7 +12,7 @@
 	pager = true
 
 [core]
-	editor = emacsclient -t
+	editor = vim
 	excludesfile = /home/steinn/.gitignore
 
 [alias]
@@ -45,6 +45,8 @@
 
         orgchangelog = log --format='** %s%n  Author:%an%n%n  Commit:%h%n%n  %b' --abbrev-commit  HEAD ^master
 
+[credential]
+	helper = osxkeychain
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
