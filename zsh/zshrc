@@ -1,0 +1,33 @@
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_CUSTOM="$HOME/.dotfiles/zsh/custom"
+ZSH_THEME="steinn"
+COMPLETION_WAITING_DOTS="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
+plugins=(
+    colored-man-pages
+    colorize
+    encode64
+    z
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+alias gs='git status'
+alias gf='git fetch'
+alias gr='git rebase'
+alias gfr='git fetch; git rebase'
+
+alias e='emacsclient -t'
+alias ec='emacsclient -c'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] &&
+    \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] &&
+    \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"

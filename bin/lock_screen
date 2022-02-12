@@ -1,3 +1,0 @@
-#!/bin/bash
-/usr/bin/xscreensaver-command --lock
-#/usr/bin/gnome-screensaver-command -l
